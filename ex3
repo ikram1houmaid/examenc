@@ -1,0 +1,94 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Q1 + Q2 : classe mère avec attributs protégés et constructeur paramétré
+class Vehicule {
+protected:
+    string immatriculation;
+    string marque;
+    double vitesseMax;
+
+public:
+    Vehicule(const string& immat, const string& m, double vMax)
+        : immatriculation(immat), marque(m), vitesseMax(vMax) {}
+
+    virtual void afficherDetails() const {
+        cout << "Immatriculation : " << immatriculation << endl;
+        cout << "Marque : " << marque << endl;
+        cout << "Vitesse max : " << vitesseMax << " km/h" << endl;
+    }
+
+    // Q6 : destructeur virtuel
+    virtual ~Vehicule() {
+        cout << "Destruction de Vehicule" << endl;
+    }
+};
+
+// Q3 : classe dérivée Voiture
+class Voiture : public Vehicule {
+private:
+    int nombrePortes;
+    string typeCarburant;
+
+public:
+    Voiture(const string& immat, const string& m, double vMax,
+            int portes, const string& carburant)
+        : Vehicule(immat, m, vMax),
+          nombrePortes(portes), typeCarburant(carburant) {}
+
+    // Q4 : redéfinition
+    void afficherDetails() const override {
+        cout << "--- Voiture ---" << endl;
+        Vehicule::afficherDetails();
+        cout << "Nombre de portes : " << nombrePortes << endl;
+        cout << "Carburant : " << typeCarburant << endl;
+    }
+
+    ~Voiture() override {
+        cout << "Destruction de Voiture" << endl;
+    }
+};
+
+// Q3 : classe dérivée Camion
+class Camion : public Vehicule {
+private:
+    double capaciteCharge;
+    int nombreEssieux;
+
+public:
+    Camion(const string& immat, const string& m, double vMax,
+           double capacite, int essieux)
+        : Vehicule(immat, m, vMax),
+          capaciteCharge(capacite), nombreEssieux(essieux) {}
+
+    // Q4 : redéfinition
+    void afficherDetails() const override {
+        cout << "--- Camion ---" << endl;
+        Vehicule::afficherDetails();
+        cout << "Capacite de charge : " << capaciteCharge << " tonnes" << endl;
+        cout << "Nombre d'essieux : " << nombreEssieux << endl;
+    }
+
+    ~Camion() override {
+        cout << "Destruction de Camion" << endl;
+    }
+};
+
+// Q5 : main avec tableau de pointeurs et polymorphisme
+int main() {
+    Vehicule* vehicules[2];
+    vehicules[0] = new Voiture("A-12345", "Toyota", 180.0, 5, "Essence");
+    vehicules[1] = new Camion("B-67890", "Volvo", 120.0, 25.5, 3);
+
+    for (int i = 0; i < 2; i++) {
+        vehicules[i]->afficherDetails();   // appel polymorphe
+        cout << endl;
+    }
+
+    for (int i = 0; i < 2; i++) {
+        delete vehicules[i];
+    }
+
+    return 0;
+}

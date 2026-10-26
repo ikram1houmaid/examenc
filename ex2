@@ -1,0 +1,58 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Q1 : classe avec attributs privés (encapsulation)
+class CompteBancaire {
+private:
+    int numero;
+    string titulaire;
+    double solde;
+
+public:
+    // Q2 : constructeur paramétré
+    CompteBancaire(int num, const string& tit, double s = 0.0)
+        : numero(num), titulaire(tit), solde(s >= 0 ? s : 0.0) {}
+
+    // Q3 : méthodes
+    void deposer(double montant) {
+        if (montant > 0) {
+            solde += montant;
+        } else {
+            cout << "Montant invalide pour un depot." << endl;
+        }
+    }
+
+    void retirer(double montant) {
+        if (montant > 0 && solde >= montant) {
+            solde -= montant;
+        } else {
+            cout << "Retrait impossible (montant invalide ou solde insuffisant)." << endl;
+        }
+    }
+
+    void afficher() const {
+        cout << "Compte n° " << numero
+             << " | Titulaire : " << titulaire
+             << " | Solde : " << solde << endl;
+    }
+
+    // Accesseurs (optionnels, bonne pratique)
+    int getNumero() const { return numero; }
+    string getTitulaire() const { return titulaire; }
+    double getSolde() const { return solde; }
+};
+
+// Q4 : programme principal
+int main() {
+    CompteBancaire c1(1001, "Ahmed", 1000.0);
+    CompteBancaire c2(1002, "Sara", 500.0);
+
+    c1.deposer(250.0);
+    c2.retirer(100.0);
+
+    c1.afficher();
+    c2.afficher();
+
+    return 0;
+}
